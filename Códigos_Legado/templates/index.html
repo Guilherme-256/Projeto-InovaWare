@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel InovaWare - Prefeitura</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; }
+        header { background: #003366; color: white; padding: 20px; text-align: center; }
+        
+        .container { display: flex; height: 80vh; padding: 20px; gap: 20px; }
+        
+        .coluna { flex: 1; background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow-y: auto; }
+        
+        h2 { border-bottom: 2px solid #003366; color: #003366; padding-bottom: 10px; }
+        
+        .card { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+        .status-congestionado { color: red; font-weight: bold; }
+        .status-moderado { color: orange; font-weight: bold; }
+        .status-leve { color: green; font-weight: bold; }
+        
+        .clima-box { text-align: center; font-size: 1.2em; }
+        .erro-alerta { background: #ffebee; color: #c62828; padding: 10px; border: 1px solid red; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Prefeitura de Betim</h1>
+    <p id="data-atual"></p>
+</header>
+
+<div class="container">
+    <div class="coluna">
+        <h2>🚦 Trânsito em Tempo Real</h2>
+        {% for via in vias %}
+        <div class="card">
+            <strong>{{ via.via }}</strong><br>
+            Velocidade: {{ via.velocidade_media }} km/h | Carros (10min): {{ via.carros_10min }}<br>
+            Índice: {{ via.indice }} | 
+            Status: <span class="status-{{ via.status|lower }}">{{ via.status }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="coluna">
+        <h2>🚌 Transporte Público</h2>
+        {% for item in onibus %}
+        <div class="card">
+            <strong>Linha: {{ item.linha }}</strong><br>
+            Local: {{ item.ponto_localizacao }}<br>
+            <span style="color: blue;">Chegada em: {{ item.tempo_estimado }} min</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="coluna">
+        <h2>☁️ Condições Climáticas</h2>
+        <div class="clima-box">
+            <p><strong>Temperatura:</strong> {{ clima.temperatura }}°C</p>
+            <p><strong>Sensação:</strong> {{ sensacao }}°C</p> <p><strong>Chuva:</strong> {{ clima.chance_chuva }} ({{ clima.intensidade }})</p>
+            <p><strong>Umidade:</strong> {{ clima.umidade }}</p>
+        </div>
+
+        <div class="erro-alerta" style="margin-top: 20px;">
+            <strong>Aviso do Sistema:</strong><br>
+            Tentativa de gerar Alerta Crítico... <br>
+            <button onclick="gerarAlerta()">Disparar Alerta Prefeitura</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JS para a data do topo
+    document.getElementById('data-atual').innerText = new Date().toLocaleDateString('pt-BR', { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+    });
+
+    // Simulação de Erro de Aceitação (JS tentando acessar algo que quebra)
+    function gerarAlerta() {
+        alert("Erro Crítico: " + variavelNaoExistente);
+    }
+</script>
+
+</body>
+</html>

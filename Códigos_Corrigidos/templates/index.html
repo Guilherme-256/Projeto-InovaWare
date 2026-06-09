@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel InovaWare - Prefeitura (CORRIGIDO)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; }
+        header { background: #003366; color: white; padding: 20px; text-align: center; }
+        
+        .container { display: flex; height: 80vh; padding: 20px; gap: 20px; }
+        
+        .coluna { flex: 1; background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow-y: auto; }
+        
+        h2 { border-bottom: 2px solid #003366; color: #003366; padding-bottom: 10px; }
+        
+        .card { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+        .status-congestionado { color: #c62828; background: #ffebee; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+        .status-moderado { color: #ef6c00; background: #fff3e0; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+        .status-leve { color: #2e7d32; background: #e8f5e9; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+        
+        .clima-box { text-align: center; font-size: 1.2em; line-height: 1.6; }
+        
+        .alerta-sucesso { background: #e8f5e9; color: #2e7d32; padding: 15px; border: 1px solid #2e7d32; border-radius: 5px; text-align: center; }
+        button { background: #003366; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:hover { background: #002244; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Prefeitura de Betim</h1>
+    <p id="data-atual"></p>
+</header>
+
+<div class="container">
+    <div class="coluna">
+        <h2>🚦 Trânsito em Tempo Real</h2>
+        {% for via in vias %}
+        <div class="card">
+            <strong>{{ via.via }}</strong><br>
+            Velocidade Média: {{ via.velocidade_media }} km/h <br> 
+            Fluxo (10min): {{ via.carros_10min }} veículos<br>
+            Índice de Densidade: {{ via.indice }} <br>
+            Status: <span class="status-{{ via.status|lower }}">{{ via.status }}</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="coluna">
+        <h2>🚌 Transporte Público</h2>
+        {% for item in onibus %}
+        <div class="card">
+            <strong>Linha: {{ item.linha }}</strong><br>
+            Localização do Ponto: {{ item.ponto_localizacao }}<br>
+            <span style="color: #003366; font-weight: bold;">Chegada estimada: {{ item.tempo_estimado }} min</span>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="coluna">
+        <h2>☁️ Condições Climáticas</h2>
+        <div class="clima-box">
+            <p><strong>Temperatura Atual:</strong> {{ clima.temperatura }}°C</p>
+            <p style="color: #005b96;"><strong>Sensação Térmica:</strong> {{ sensacao }}°C</p> 
+            <p><strong>Chance de Chuva:</strong> {{ clima.chance_chuva }}</p>
+            <p><strong>Intensidade:</strong> {{ clima.intensidade }}</p>
+            <p><strong>Umidade Relativa:</strong> {{ clima.umidade }}</p>
+        </div>
+
+        <div class="alerta-sucesso" style="margin-top: 20px;">
+            <strong>Central de Alertas Operacionais</strong><br>
+            <p style="font-size: 0.9em; color: #555;">Dispare notificações meteorológicas para os cidadãos.</p>
+            <button onclick="gerarAlerta()">Disparar Alerta Prefeitura</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JS para a data do topo
+    document.getElementById('data-atual').innerText = new Date().toLocaleDateString('pt-BR', { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+    });
+
+    // CORREÇÃO: Função limpa, sem variáveis inexistentes. Entrega a usabilidade esperada.
+    function gerarAlerta() {
+        alert("🚨 ALERTA ENVIADO AOS CIDADÃOS:\n\nChuva forte detectada na região central. Evite vias de baixo escoamento.");
+    }
+</script>
+
+</body>
+</html>
